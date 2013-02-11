@@ -1,3 +1,7 @@
 *.log
 target/
 src/solr-local/work/
+.classpath
+.project
+.settings/
+target-eclipse/
