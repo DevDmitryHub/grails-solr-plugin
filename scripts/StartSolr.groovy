@@ -36,11 +36,16 @@ target ( startsolr: "Start Solr Jetty Instance") {
     depends("stopsolr")
     depends("init")
 		
-		// overlay the schema.xml config file in the apps grails-app/conf/solr directory (and other conf files)
-		Ant.copy(todir:"${solrHome}/solr/conf", failonerror: false) {
-			fileset( dir: "${basedir}/grails-app/conf/solr")
-		}
+    // check for the log directory and create if necessary
+    def solrLogDir = "${solrHome}/logs"
+    if(!new File(solrLogDir)?.exists()) {
+      Ant.mkdir(dir:"${solrLogDir}")
+    }
 
+		// overlay the config files in the app's grails-app/conf/solr directory
+		Ant.copy(todir:"${solrHome}/solr", failonerror: false) {
+			fileset(dir:"${basedir}/grails-app/conf/solr")
+		}
 
 		// pause just for a bit more time to be sure Solr Stopped
 		Thread.sleep(1000)
@@ -49,7 +54,8 @@ target ( startsolr: "Start Solr Jetty Instance") {
 		Ant.java ( jar:"${solrHome}/start.jar", dir: "${solrHome}", fork:true, spawn:true) {
 			jvmarg(value:"-DSTOP.PORT=${solrStopPort}")
 			jvmarg(value:"-DSTOP.KEY=secret")
-			arg(line:"etc/jetty-logging.xml etc/jetty.xml")
+      jvmarg(value:"-Djava.util.logging.config.file=etc/logging.properties")
+			arg(line:"etc/jetty.xml")
 		}
 		
 			
@@ -86,8 +92,15 @@ target(stopsolr: "Stop Solr") {
 
 target(init: "Create the solr-home directory") {
   // copy over the resources for solr home
-	Ant.mkdir(dir: "${solrHome}")
+	Ant.mkdir(dir:"${solrHome}")
+  Ant.mkdir(dir:"${solrHome}/solr-webapp")
 	Ant.copy(todir:"${solrHome}") {
-		fileset( dir: "${pluginBasedir}/src/solr-local", )
+		fileset(dir: "${pluginBasedir}/src/solr-local") {
+      include(name:"contexts/**")
+      include(name:"etc/**")
+      include(name:"lib/**")
+      include(name:"webapps/**")
+      include(name:"start.jar")
+    }
 	}
 }
