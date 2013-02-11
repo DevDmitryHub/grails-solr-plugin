@@ -9,9 +9,9 @@
 //    ant.mkdir(dir:"${basedir}/grails-app/jobs")
 //
 def solrConfDir = "${basedir}/grails-app/conf/solr"
-if(! new File(solrConfDir)?.exists()) {
-  Ant.mkdir(dir: "${basedir}/grails-app/conf/solr")
-  Ant.copy(todir:"${basedir}/grails-app/conf/solr") {
-    fileset(dir: "${pluginBasedir}/src/solr-local/solr/conf" )
+if(!new File(solrConfDir)?.exists()) {
+  Ant.mkdir(dir:"${solrConfDir}")
+  Ant.copy(todir:"${solrConfDir}") {
+    fileset(dir:"${pluginBasedir}/src/solr-local/solr")
   }  
 }
