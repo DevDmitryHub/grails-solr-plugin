@@ -38,7 +38,7 @@ import org.grails.solr.SolrUtil
 
 class SolrGrailsPlugin {
     // the plugin version
-    def version = "0.3"
+    def version = "0.3.1"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1 > *"
     // the other plugins this plugin depends on
@@ -104,7 +104,7 @@ open source search server through the SolrJ library.
             def delegateDomainOjbect = delegate
             def solrService = ctx.getBean("solrService");
             if(!server)
-              server = solrService.getServer()
+              server = solrService.getServer(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
           
 
             // TODO - is there a bette way to ignore built in parameters?
@@ -115,16 +115,19 @@ open source search server through the SolrJ library.
             indexDomain(application, delegateDomainOjbect, doc)
           
             server.add(doc)
-            server.commit()
-
+            if (GrailsClassUtils.getStaticPropertyValue(dc.clazz, "enableSolrCommit")) {
+              server.commit()
+            }
           }
         
           // add deleteSolr method to domain classes
           dc.metaClass.deleteSolr << { ->
             def solrService = ctx.getBean("solrService");
-            def server = solrService.getServer()
+            def server = solrService.getServer(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
             server.deleteByQuery( "id:${delegate.class.name}-${delegate.id}");
-            server.commit()
+            if (GrailsClassUtils.getStaticPropertyValue(dc.clazz, "enableSolrCommit")) {
+              server.commit()
+            }
           }   
         
           // add deleteSolr method to domain classes
@@ -184,12 +187,12 @@ open source search server through the SolrJ library.
         
           dc.metaClass.'static'.searchSolr << { query ->
             def solrService = ctx.getBean("solrService");
-            def server = solrService.getServer()
+            //def server = solrService.getServer()
             def solrQuery = (query instanceof org.apache.solr.client.solrj.SolrQuery) ? query : new SolrQuery( query )
             def objType = (delegate.class.name == 'java.lang.Class') ? delegate.name : delegate.class.name
             solrQuery.addFilterQuery("${SolrUtil.TYPE_FIELD}:${objType}")
             //println solrQuery
-            def result = solrService.search(solrQuery)
+            def result = solrService.search(solrQuery, GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
 
             // GIVING UP ON THE OBJECT RESULTS FOR THE TIME BEING
             //def objectList = []
