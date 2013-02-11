@@ -31,7 +31,7 @@ import org.grails.solr.Listing
 import org.grails.solr.SolrUtil
 import org.grails.solr.TESTENUM
 import org.apache.solr.client.solrj.SolrQuery
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer
+import org.apache.solr.client.solrj.impl.HttpSolrServer
 import org.apache.solr.client.solrj.response.QueryResponse
 
 class DomainMethodTests extends GrailsUnitTestCase {
