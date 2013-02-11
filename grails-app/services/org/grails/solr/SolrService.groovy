@@ -23,8 +23,9 @@
 
 package org.grails.solr
 
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer
-import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer
+
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
+import org.apache.solr.client.solrj.impl.HttpSolrServer
 import org.apache.solr.client.solrj.impl.XMLResponseParser
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.apache.solr.client.solrj.SolrQuery
@@ -42,21 +43,24 @@ class SolrService {
   * Return a SolrServer
   * {@link http://lucene.apache.org/solr/api/org/apache/solr/client/solrj/SolrServer.html}
   */
-  def getServer() {
+  def getServer(core='') {
     def url =  (grailsApplication.config.solr?.url) ? grailsApplication.config.solr.url : "http://localhost:8983/solr"
+    if (core) {
+      url += (url.endsWith('/')) ? core : '/' + core
+    }
     def server 
     
     // only create a new CommonsHttpSolrServer once per URL since it is threadsafe and this service is a singleton
     // Ref: http://wiki.apache.org/solr/Solrj#CommonsHttpSolrServer
     if( !servers[url] ){
-        servers[url] = new CommonsHttpSolrServer( url )
+        servers[url] = new HttpSolrServer( url )
     }
     return servers[url]
   }
   
   def getStreamingUpdateServer(queueSize=20, numThreads=3) {
     def url =  (grailsApplication.config.solr?.url) ? grailsApplication.config.solr.url : "http://localhost:8983/solr"
-    def server = new StreamingUpdateSolrServer( url, queueSize, numThreads)
+    def server = new ConcurrentUpdateSolrServer( url, queueSize, numThreads)
     return server     
   }
 
@@ -66,8 +70,8 @@ class SolrService {
   * @param query - the Solr query string
   * @return Map with 'resultList' - list of Maps representing results and 'queryResponse' - Solrj query result
   */
-  def search(String query) {
-    search( new SolrQuery( query ) )
+  def search(String query, core='') {
+    search( new SolrQuery( query ), core )
   }
   
   /**
@@ -76,8 +80,8 @@ class SolrService {
   * @param solrQuery - SolrQuery object representating the query {@link http://lucene.apache.org/solr/api/org/apache/solr/client/solrj/SolrQuery.html}
   * @return Map with 'resultList' - list of Maps representing results and 'queryResponse' - Solrj query result
   */
-  def search(SolrQuery solrQuery) {
-    QueryResponse rsp = getServer().query( solrQuery );
+  def search(SolrQuery solrQuery, core='') {
+    QueryResponse rsp = getServer(core).query( solrQuery );
     
 
     def results = []
