@@ -43,7 +43,7 @@ class SolrGrailsPlugin {
       "grails-app/views/error.gsp",
       "grails-app/domain/**",
       "grails-app/Config.groovy",
-      "grials-app/UrlMappings.groovy",
+      "grails-app/UrlMappings.groovy",
       "grails-app/Datasource.groovy"
     ]
 
