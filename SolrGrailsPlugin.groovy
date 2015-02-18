@@ -21,14 +21,9 @@
 * ----------------------------------------------------------------------------
 */
 
-import org.codehaus.groovy.grails.commons.metaclass.*
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.apachedomainDesc.solr.client.solrj.impl.*
 import org.apache.solr.common.*
-import org.apache.solr.client.solrj.response.QueryResponse
 import org.apache.solr.client.solrj.SolrQuery
 
-import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 import org.codehaus.groovy.grails.commons.GrailsClassUtils
 
@@ -38,9 +33,9 @@ import org.grails.solr.SolrUtil
 
 class SolrGrailsPlugin {
     // the plugin version
-    def version = "0.3.2"
+    def version = "0.3.3"
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "1.1 > *"
+    def grailsVersion = "2.4 > *"
     // the other plugins this plugin depends on
     def dependsOn = [domainClass: '1.1 > *'] //, hibernate: '1.1 > *']
     // resources that are excluded from plugin packaging

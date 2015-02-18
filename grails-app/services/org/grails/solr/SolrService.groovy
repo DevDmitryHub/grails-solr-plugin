@@ -26,11 +26,8 @@ package org.grails.solr
 
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
 import org.apache.solr.client.solrj.impl.HttpSolrServer
-import org.apache.solr.client.solrj.impl.XMLResponseParser
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.response.QueryResponse
-import org.grails.solr.*
 
 
 class SolrService {
