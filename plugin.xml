@@ -1,4 +1,4 @@
-<plugin name='solr' version='0.3.2' grailsVersion='1.1 &gt; *'>
+<plugin name='solr' version='0.3.3' grailsVersion='2.4 &gt; *'>
   <author>Mike Brevoort</author>
   <authorEmail>brevoortm@avalonconsult.com</authorEmail>
   <title>Grails Solr Plugin</title>
@@ -7,23 +7,9 @@ Provides search capabilities for Grails domain model and more using the excellen
 open source search server through the SolrJ library.
 </description>
   <documentation>http://grails.org/Solr+Plugin</documentation>
+  <type>SolrGrailsPlugin</type>
   <resources>
-    <resource>BuildConfig</resource>
-    <resource>Config</resource>
-    <resource>DataSource</resource>
-    <resource>UrlMappings</resource>
-    <resource>org.grails.solr.Listing</resource>
-    <resource>org.grails.solr.Solr1</resource>
-    <resource>org.grails.solr.Solr1Annotated</resource>
-    <resource>org.grails.solr.Solr1Disabled</resource>
-    <resource>org.grails.solr.Solr1Override</resource>
-    <resource>org.grails.solr.Solr2</resource>
-    <resource>org.grails.solr.TESTENUM</resource>
     <resource>org.grails.solr.SolrService</resource>
     <resource>org.grails.solr.SolrTagLib</resource>
   </resources>
-  <dependencies>
-    <plugin name='domainClass' version='1.1 &gt; *' />
-  </dependencies>
-  <behavior />
 </plugin>
