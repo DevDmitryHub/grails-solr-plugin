@@ -28,4 +28,7 @@ grails.project.dependency.resolution = {
     compile ('org.apache.solr:solr-solrj:4.0.0') {
     }
   }
+  plugins {
+    build ":release:3.0.1"
+  }
 }
