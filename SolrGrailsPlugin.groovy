@@ -99,7 +99,7 @@ open source search server through the SolrJ library.
             def delegateDomainOjbect = delegate
             def solrService = ctx.getBean("solrService");
             if(!server)
-              server = solrService.getServer(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
+              server = solrService.getConcurrentUpdateServer(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
           
 
             // TODO - is there a bette way to ignore built in parameters?
@@ -118,7 +118,7 @@ open source search server through the SolrJ library.
           // add deleteSolr method to domain classes
           dc.metaClass.deleteSolr << { ->
             def solrService = ctx.getBean("solrService");
-            def server = solrService.getServer(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
+            def server = solrService.getConcurrentUpdateServer(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
             server.deleteByQuery( "id:${delegate.class.name}-${delegate.id}");
             if (GrailsClassUtils.getStaticPropertyValue(dc.clazz, "enableSolrCommit")) {
               server.commit()
@@ -129,7 +129,7 @@ open source search server through the SolrJ library.
           /*
           dc.metaClass.addSolr << { ->
             def solrService = ctx.getBean("solrService");
-            def server = solrService.getServer
+            def server = solrService.getConcurrentUpdateServer
           
             server.addBean( delegate );
             server.commit()

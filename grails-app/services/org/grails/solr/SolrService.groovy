@@ -55,8 +55,11 @@ class SolrService {
     return servers[url]
   }
   
-  def getStreamingUpdateServer(queueSize=20, numThreads=3) {
+  def getConcurrentUpdateServer(core='', queueSize=20, numThreads=3) {
     def url =  (grailsApplication.config.solr?.url) ? grailsApplication.config.solr.url : "http://localhost:8983/solr"
+    if (core) {
+      url += (url.endsWith('/')) ? core : '/' + core
+    }
     def server = new ConcurrentUpdateSolrServer( url, queueSize, numThreads)
     return server     
   }

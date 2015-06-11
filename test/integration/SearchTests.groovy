@@ -102,8 +102,8 @@ class SearchTests extends GroovyTestCase {
 		assert(result.resultList[0].id == listing2.id)
 	}
 	
-	void testStreamingUpdateServer() {
-		def streamingServer = solrService.getStreamingUpdateServer(20,3)
+	void testConcurrentUpdateServer() {
+		def streamingServer = solrService.getConcurrentUpdateServer()
 		def solrServer = solrService.getServer()
 		assertNotNull(solrServer)
 		
