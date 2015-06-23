@@ -27,6 +27,7 @@ grails.project.dependency.resolution = {
     // runtime 'mysql:mysql-connector-java:5.1.13'
     compile ('org.apache.solr:solr-solrj:4.1.0') {
     }
+    compile 'cglib:cglib:2.2.2'
   }
   plugins {
     build ":release:3.0.1"
