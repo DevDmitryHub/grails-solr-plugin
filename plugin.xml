@@ -1,4 +1,4 @@
-<plugin name='solr' version='0.3.3' grailsVersion='2.4 &gt; *'>
+<plugin name='solr' version='0.3.4' grailsVersion='2.4 &gt; *'>
   <author>Mike Brevoort</author>
   <authorEmail>brevoortm@avalonconsult.com</authorEmail>
   <title>Grails Solr Plugin</title>
