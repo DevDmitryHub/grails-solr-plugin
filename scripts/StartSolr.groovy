@@ -54,7 +54,8 @@ target ( startsolr: "Start Solr Jetty Instance") {
 		Ant.java ( jar:"${solrHome}/start.jar", dir: "${solrHome}", fork:true, spawn:true) {
 			jvmarg(value:"-DSTOP.PORT=${solrStopPort}")
 			jvmarg(value:"-DSTOP.KEY=secret")
-      jvmarg(value:"-Djava.util.logging.config.file=etc/logging.properties")
+      jvmarg(value:"-Djava.util.logging.config.file=resources/jetty-logging.properties")
+      arg(value:"--module=http")
 			arg(line:"etc/jetty.xml")
 		}
 		
@@ -99,7 +100,9 @@ target(init: "Create the solr-home directory") {
       include(name:"contexts/**")
       include(name:"etc/**")
       include(name:"lib/**")
-      include(name:"webapps/**")
+      include(name:"modules/**")
+      include(name:"resources/**")
+      include(name:"solr-webapp/**")
       include(name:"start.jar")
     }
 	}

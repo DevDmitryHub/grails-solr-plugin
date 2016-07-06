@@ -1,0 +1,28 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "org.grails:grails-gradle-plugin:2.1.2"
+  }
+}
+
+version "0.3.5"
+group "org.grails"
+
+apply plugin: "grails"
+
+repositories {
+  grails.central() //creates a maven repo for the Grails Central repository (Core libraries and plugins)
+}
+
+grails {
+  grailsVersion = '2.4.5'
+}
+
+dependencies {
+  bootstrap 'org.grails.plugins:tomcat:7.0.55.2'
+  //build 'release:3.0.1'
+  compile 'org.apache.solr:solr-solrj:5.3.1'
+  runtime 'org.hibernate:hibernate-core:3.6.10.Final'
+}

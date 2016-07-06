@@ -13,48 +13,79 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Solr example
+Solr server
 ------------
 
 This directory contains an instance of the Jetty Servlet container setup to 
-run Solr using an example configuration.
+run Solr.
 
-To run this example:
+To run Solr:
 
-  java -jar start.jar
+  cd $SOLR_INSTALL
+  bin/solr start
 
-in this example directory, and when Solr is started connect to 
+where $SOLR_INSTALL is the location where you extracted the Solr installation bundle.
 
-  http://localhost:8983/solr/
+Server directory layout
+-----------------------
 
-To add documents to the index, use the post.jar (or post.sh script) in
-the example/exampledocs subdirectory (while Solr is running), for example:
+server/contexts
 
-     cd exampledocs
-     java -jar post.jar *.xml
-Or:  sh post.sh *.xml
+  This directory contains the Jetty Web application deployment descriptor for the Solr Web app.
 
-For more information about this example please read...
+server/etc
 
- * example/solr/README.txt
-   For more information about the "Solr Home" and Solr specific configuration
- * http://lucene.apache.org/solr/tutorial.html
-   For a Tutorial using this example configuration
- * http://wiki.apache.org/solr/SolrResources 
-   For a list of other tutorials and introductory articles.
+  Jetty configuration and example SSL keystore
 
-Notes About These Examples
+server/lib
+
+  Jetty and other 3rd party libraries
+
+server/logs
+
+  Solr log files
+
+server/resources
+
+  Contains configuration files, such as the Log4j configuration (log4j.properties) for configuring Solr loggers.
+
+server/scripts/cloud-scripts
+
+  Command-line utility for working with ZooKeeper when running in SolrCloud mode, see zkcli.sh / .cmd for
+  usage information.
+
+server/solr
+
+  Default solr.solr.home directory where Solr will create core directories; must contain solr.xml
+
+server/solr/configsets
+
+  Directories containing different configuration options for running Solr.
+
+    basic_configs               : Bare minimum configuration settings needed to run Solr.
+
+    data_driven_schema_configs  : Field-guessing and managed schema mode; use this configuration if you want
+                                  to start indexing data in Solr without having to design a schema upfront.
+                                  You can use the REST API to manage your schema as you refine your index
+                                  requirements.
+
+    sample_techproducts_configs : Comprehensive example configuration that demonstrates many of the powerful
+                                  features of Solr, based on the use case of building a search solution for
+                                  tech products.
+
+server/solr-webapp
+
+  Contains files used by the Solr server; do not edit files in this directory (Solr is not a Java Web application).
+
+
+Notes About Solr Examples
 --------------------------
 
 * SolrHome *
 
 By default, start.jar starts Solr in Jetty using the default Solr Home
-directory of "./solr/" (relative to the working directory of hte servlet 
-container).  To run other example configurations, you can specify the 
-solr.solr.home system property when starting jetty...
-
-  java -Dsolr.solr.home=multicore -jar start.jar
-  java -Dsolr.solr.home=example-DIH/solr -jar start.jar
+directory of "./solr/" (relative to the working directory of the servlet 
+container).
 
 * References to Jar Files Outside This Directory *
 
@@ -70,13 +101,10 @@ solrconfig.xml.
 
 * Logging *
 
-By default, Jetty & Solr will log to the console. This can be convenient when 
-first getting started, but eventually you will want to log to a file. To 
-configure logging, you can just pass a system property to Jetty on startup:
-
-  java -Djava.util.logging.config.file=etc/logging.properties -jar start.jar
+By default, Jetty & Solr will log to the console and logs/solr.log. This can
+be convenient when first getting started, but eventually you will want to
+log just to a file. To configure logging, edit the log4j.properties file in
+"resources".
  
-This will use Java Util Logging to log to a file based on the config in
-etc/logging.properties. Logs will be written in the logs directory. It is
-also possible to setup log4j or other popular logging frameworks.
+It is also possible to setup log4j or other popular logging frameworks.
 

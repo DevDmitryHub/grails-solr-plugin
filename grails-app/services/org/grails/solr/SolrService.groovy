@@ -24,7 +24,7 @@
 package org.grails.solr
 
 
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient
 import org.apache.solr.client.solrj.impl.HttpSolrServer
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.response.QueryResponse
@@ -55,13 +55,15 @@ class SolrService {
     return servers[url]
   }
   
-  def getConcurrentUpdateServer(core='', queueSize=20, numThreads=3) {
+  def getConcurrentUpdateClient(core='', queueSize=20, numThreads=3) {
     def url =  (grailsApplication.config.solr?.url) ? grailsApplication.config.solr.url : "http://localhost:8983/solr"
     if (core) {
       url += (url.endsWith('/')) ? core : '/' + core
     }
-    def server = new ConcurrentUpdateSolrServer( url, queueSize, numThreads)
-    return server     
+    if (!servers[url]) {
+      servers[url] = new ConcurrentUpdateSolrClient(url, queueSize, numThreads)
+    }
+    return servers[url]
   }
 
   /**

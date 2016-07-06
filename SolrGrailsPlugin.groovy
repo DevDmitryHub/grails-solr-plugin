@@ -33,7 +33,7 @@ import org.grails.solr.SolrUtil
 
 class SolrGrailsPlugin {
     // the plugin version
-    def version = "0.3.3"
+    def version = "0.3.5"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.4 > *"
     // the other plugins this plugin depends on
@@ -99,7 +99,9 @@ open source search server through the SolrJ library.
             def delegateDomainOjbect = delegate
             def solrService = ctx.getBean("solrService");
             if(!server)
-              server = solrService.getConcurrentUpdateServer(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
+              server = solrService.getConcurrentUpdateClient(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"),
+                  GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrQueueSize") ?: 20,
+                  GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrNumThreads") ?: 3)
           
 
             // TODO - is there a bette way to ignore built in parameters?
@@ -118,7 +120,9 @@ open source search server through the SolrJ library.
           // add deleteSolr method to domain classes
           dc.metaClass.deleteSolr << { ->
             def solrService = ctx.getBean("solrService");
-            def server = solrService.getConcurrentUpdateServer(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"))
+            def server = solrService.getConcurrentUpdateClient(GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrCore"),
+                GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrQueueSize") ?: 20,
+                GrailsClassUtils.getStaticPropertyValue(dc.clazz, "solrNumThreads") ?: 3)
             server.deleteByQuery( "id:${delegate.class.name}-${delegate.id}");
             if (GrailsClassUtils.getStaticPropertyValue(dc.clazz, "enableSolrCommit")) {
               server.commit()
@@ -129,7 +133,7 @@ open source search server through the SolrJ library.
           /*
           dc.metaClass.addSolr << { ->
             def solrService = ctx.getBean("solrService");
-            def server = solrService.getConcurrentUpdateServer
+            def server = solrService.getConcurrentUpdateClient
           
             server.addBean( delegate );
             server.commit()
